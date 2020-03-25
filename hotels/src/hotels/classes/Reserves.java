@@ -46,10 +46,10 @@ public class Reserves{
 	
 	public String[] posanttaula() {
 		String[] array = new String[4];
-        array[0]=this.entrada.getDayOfMonth()+"-"+this.entrada.getMonthValue()+"-"+this.entrada.getYear();
+        array[0]=this.entrada.getDayOfMonth()+"/"+this.entrada.getMonthValue()+"/"+this.entrada.getYear();
         array[1]=client.getDni();
-        array[2]=this.numeropersones+"";
-        array[3]="";
+        array[2]=this.numpersones+"";
+        array[3]=this.getHabitacio().getNumhabitacio()+"";
         return array;
 	}
 	
