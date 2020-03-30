@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 import com.toedter.calendar.JCalendar;
 
 public class Functions {
@@ -60,6 +62,7 @@ public class Functions {
 			h.setCapacitat(Integer.parseInt(capacitat));
 		}
 	}
+
 	public static boolean estaocupat(Hotel hotel, LocalDate entrada, LocalDate sortida, String numeropersones) {
 		int limit = 2;
 		for (Habitacions h : hotel.getHabitacions()) {
@@ -67,19 +70,19 @@ public class Functions {
 				int capacitat = Integer.parseInt(numeropersones) + i;
 				for (Reserves r : hotel.pendents) {
 
-					if (r.getHabitacio().getCapacitat() == capacitat && (
-		                    (entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida())) ||
-		                    (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida())) ||
-		                    (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())) )) {
+					if (r.getHabitacio().getCapacitat() == capacitat
+							&& ((entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida()))
+									|| (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida()))
+									|| (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())))) {
 						return true;
 					}
 				}
 				for (Reserves r : hotel.confirmades) {
 
-					if (r.getHabitacio().getCapacitat() == capacitat && (
-		                    (entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida())) ||
-		                    (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida())) ||
-		                    (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())) )) {
+					if (r.getHabitacio().getCapacitat() == capacitat
+							&& ((entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida()))
+									|| (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida()))
+									|| (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())))) {
 						return true;
 					}
 				}
@@ -100,22 +103,21 @@ public class Functions {
 				for (Reserves r : hotel.pendents) {
 					if (h.getNumhabitacio() == r.getHabitacio().getNumhabitacio()) {
 
-						if (r.getHabitacio().getCapacitat() == capacitat && (
-			                    (entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida())) ||
-			                    (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida())) ||
-			                    (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())) )) {
+						if (r.getHabitacio().getCapacitat() == capacitat
+								&& ((entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida()))
+										|| (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida()))
+										|| (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())))) {
 							return h;
 						}
 					}
 				}
-				
 
 				for (Reserves r : hotel.confirmades) {
 					if (h.getNumhabitacio() == r.getHabitacio().getNumhabitacio()) {
-						if (r.getHabitacio().getCapacitat() == capacitat && (
-			                    (entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida())) ||
-			                    (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida())) ||
-			                    (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())) )) {
+						if (r.getHabitacio().getCapacitat() == capacitat
+								&& ((entrada.isAfter(r.getEntrada()) && entrada.isBefore(r.getSortida()))
+										|| (sortida.isAfter(r.getEntrada()) && sortida.isBefore(r.getSortida()))
+										|| (entrada.isBefore(r.getEntrada()) && sortida.isAfter(r.getSortida())))) {
 							return h;
 						}
 					}
@@ -128,6 +130,14 @@ public class Functions {
 		}
 		return null;
 
+	}
+
+	public static void pasarloaconfirmades(ArrayList<Reserves> arraypendents, ArrayList<Reserves> arrayconfirmades,
+			int index, DefaultTableModel reserves, DefaultTableModel confirmades) {
+		arrayconfirmades.add(arraypendents.get(index));
+		arraypendents.remove(index);
+		reserves.removeRow(index);
+		Reserves.afegirtaulaconfirmades(arrayconfirmades, confirmades);
 	}
 
 }

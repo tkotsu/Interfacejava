@@ -1,6 +1,9 @@
 package hotels.classes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import javax.swing.table.DefaultTableModel;
 
 public class Reserves{
 	Clients client;
@@ -51,6 +54,18 @@ public class Reserves{
         array[2]=this.numpersones+"";
         array[3]=this.getHabitacio().getNumhabitacio()+"";
         return array;
+	}
+	
+	public static void afegirtaulaconfirmades(ArrayList<Reserves> confirmades, DefaultTableModel confirmades2) {
+		confirmades2.setRowCount(0);
+		for (Reserves reserves : confirmades) {
+			String[] textconfirmades = new String[4];
+			textconfirmades[0] = reserves.getClient().getDni();
+			textconfirmades[1] = reserves.getClient().getNom();
+			textconfirmades[2] = reserves.getClient().getCognom();
+			textconfirmades[3] = String.valueOf(reserves.getHabitacio().getNumhabitacio());
+			confirmades2.addRow(textconfirmades);
+		}
 	}
 	
 }

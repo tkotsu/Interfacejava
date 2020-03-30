@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.ModuleLayer.Controller;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -26,6 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JCalendar;
@@ -41,6 +45,7 @@ public class Finestra extends JFrame {
 	// variables per a gestiÃ³
 	JLabel titolgestio, pendentsgestio, confirmadesgestio;
 	DefaultTableModel reserves, confirmades;
+	JTable taula, taula2;
 	JDateChooser mostrardatareserves;
 	// Fi variables per a gestiÃ³
 
@@ -84,6 +89,7 @@ public class Finestra extends JFrame {
 		
 		// Per a Gestio
 		posarTotgestio();
+		confirmarreserves();
 
 		// Per el panell de clients
 		posarTotclients();
@@ -116,6 +122,7 @@ public class Finestra extends JFrame {
 		panellback.setBounds(802, 0, 400, 700);
 		this.getContentPane().add(panellback);
 	}
+	
 
 	private void posarTitols() {
 		titolgestio = new JLabel();
@@ -153,8 +160,9 @@ public class Finestra extends JFrame {
 		reserves.addColumn("Dia");
 		reserves.addColumn("Persones");
 		reserves.addColumn("Habitació");
-		JTable taula = new JTable(reserves);
+		taula = new JTable(reserves);
 		taula.setBounds(20, 150, 360, 200);
+		taula.setDefaultEditor(Object.class, null);
 		panellgestio.add(taula);
 		JScrollPane scroll = new JScrollPane(taula, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -171,18 +179,71 @@ public class Finestra extends JFrame {
 		mostrardatareserves.setBounds(220, 372, 160, 25);
 		panellgestio.add(mostrardatareserves);
 
-		DefaultTableModel confirmades = new DefaultTableModel();
-		confirmades.addColumn("Nom");
-		confirmades.addColumn("Date in");
-		confirmades.addColumn("Date out");
-		confirmades.addColumn("HabitaciÃ³");
-		JTable taula2 = new JTable(confirmades);
+		confirmades = new DefaultTableModel();
+		confirmades.addColumn("dni");
+		confirmades.addColumn("nom");
+		confirmades.addColumn("cognom");
+		confirmades.addColumn("Habitació");
+		taula2 = new JTable(confirmades);
 		taula2.setBounds(20, 410, 360, 200);
+		taula2.setDefaultEditor(Object.class, null);
 		panellgestio.add(taula2);
 		JScrollPane scroll2 = new JScrollPane(taula2, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scroll2.setBounds(20, 410, 360, 200);
 		panellgestio.add(scroll2);
+	}
+	
+	private void confirmarreserves() {
+		MouseListener dobleclic = new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					String[] opcionsreserva = new String[] {"Confirmar-la", "Descartar-la", "Cancelar"};
+					JOptionPane opcrese = new JOptionPane();
+					int eleccioreserva = opcrese.showOptionDialog(null, "Que vols fer amb aquesta reserva?", "Confirmació",
+				             JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+				             null, opcionsreserva, opcionsreserva[0]);
+					switch(eleccioreserva) {
+					case 0:
+						Functions.pasarloaconfirmades(hotel.getPendents(), hotel.getConfirmades(), taula.getSelectedRow(), reserves, confirmades);
+						break;
+					case 1:
+						
+						break;
+					case 2:
+						
+						break;
+					}
+				}
+			}
+		};
+		taula.addMouseListener(dobleclic);
 	}
 
 	// Aqui posarem tot per el panell de clients.
